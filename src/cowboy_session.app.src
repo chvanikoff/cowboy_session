@@ -1,0 +1,13 @@
+{application, cowboy_session, [
+	{description, "Cowboy session management"},
+	{vsn, git},
+	{registered, []},
+	{applications, [
+		kernel,
+		stdlib,
+		gproc,
+		ossp_uuid
+	]},
+	{mod, {cowboy_session, []}},
+	{env, []}
+]}.
