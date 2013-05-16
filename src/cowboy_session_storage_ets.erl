@@ -44,8 +44,8 @@ get(SID, Key, Default) ->
 delete(SID) ->
 	gen_server:cast(?MODULE, {delete, SID}).
 
-stop() ->
-	gen_server:cast(?MODULE, stop).
+stop(New_sorage) ->
+	gen_server:cast(?MODULE, {stop, New_storage}).
 
 
 %%%===================================================================
@@ -85,7 +85,7 @@ handle_cast({delete, SID}, State) ->
 	ets:delete(?TABLE, SID),
 	{noreply, State};
 
-handle_cast(stop, State) ->
+handle_cast({stop, _New_storage}, State) ->
 	{stop, normal, State};
 
 handle_cast(_, State) -> {noreply, State}.

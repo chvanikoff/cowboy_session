@@ -71,11 +71,11 @@ handle_call(_Request, _From, State) ->
 handle_cast({set, Key, Value}, State) ->
 	{noreply, lists:keystore(Key, 1, State, {Key, Value})};
 handle_cast({update_storage, Value}, State) ->
+	{ok, Pid} = supervisor:start_child(cowboy_session, {Value, {Value, start_link, []}, permanent, 5000, worker, [Value]}),
 	{_, Storage} = lists:keyfind(storage, 1, State),
-	Storage:stop(),
+	Storage:stop(Pid),
 	supervisor:terminate_child(cowboy_session, self()),
 	supervisor:delete_child(cowboy_session, ?MODULE),
-	supervisor:start_child(cowboy_session, {Value, {Value, start_link, []}, permanent, 5000, worker, [Value]}),
 	{noreply, lists:keystore(storage, 1, State, {storage, Value})};
 handle_cast(_Msg, State) ->
 	{noreply, State}.
