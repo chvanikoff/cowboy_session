@@ -32,15 +32,15 @@ on_request(Req) ->
 	{_Session, Req2} = get_session(Req),
 	Req2.
 
-get(Req, Key) ->
+get(Key, Req) ->
 	get(Req, Key, undefined).
 
-get(Req, Key, Default) ->
+get(Key, Default, Req) ->
 	{Pid, Req2} = get_session(Req),
 	Value = cowboy_session_server:get(Pid, Key, Default),
 	{Value, Req2}.
 
-set(Req, Key, Value) ->
+set(Key, Value, Req) ->
 	{Pid, Req2} = get_session(Req),
 	cowboy_session_server:set(Pid, Key, Value),
 	{ok, Req2}.
