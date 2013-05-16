@@ -33,7 +33,7 @@ on_request(Req) ->
 	Req2.
 
 get(Key, Req) ->
-	get(Req, Key, undefined).
+	get(Key, undefined, Req).
 
 get(Key, Default, Req) ->
 	{Pid, Req2} = get_session(Req),
