@@ -60,6 +60,7 @@ init(Config) ->
 	{_, SID} = lists:keyfind(sid, 1, Config),
 	{_, Expire} = lists:keyfind(expire, 1, Config),
 	{_, Storage} = lists:keyfind(storage, 1, Config),
+	Storage:new(SID),
 	gproc:add_local_name({cowboy_session, SID}),
 	{ok, Expire_TRef} = timer:exit_after(Expire * 1000, expire),
 	{ok, #state{
