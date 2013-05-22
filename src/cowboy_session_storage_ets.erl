@@ -9,7 +9,7 @@
 	set/3,
 	get/3,
 	delete/1,
-	stop/0
+	stop/1
 ]).
 
 %% Gen_server behaviour
@@ -44,7 +44,7 @@ get(SID, Key, Default) ->
 delete(SID) ->
 	gen_server:cast(?MODULE, {delete, SID}).
 
-stop(New_sorage) ->
+stop(New_storage) ->
 	gen_server:cast(?MODULE, {stop, New_storage}).
 
 
