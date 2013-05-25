@@ -7,7 +7,8 @@
 	on_request/1,
 	get/2, get/3,
 	set/3,
-	expire/1
+	expire/1,
+	touch/1
 ]).
 
 -behaviour(application).
@@ -50,6 +51,10 @@ expire(Req) ->
 	cowboy_session_server:stop(Pid),
 	Req3 = clear_cookie(Req2),
 	{ok, Req3}.
+
+touch(Req) ->
+	{_Pid, Req2} = get_session(Req),
+	{ok, Req2}.
 
 %% ===================================================================
 %% Application callbacks
