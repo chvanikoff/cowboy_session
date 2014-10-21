@@ -116,7 +116,9 @@ clear_cookie(Req) ->
 		Req2).
 
 create_session(Req) ->
-	SID = ossp_uuid:make(v4, text),
+	%% The cookie value cannot contain any of the following characters:
+	%%   ,; \t\r\n\013\014
+	SID = list_to_binary(uuid:to_string(uuid:v4())),
 	Cookie_name = ?CONFIG(cookie_name),
 	Cookie_options = ?CONFIG(cookie_options),
 	Storage = ?CONFIG(storage),
