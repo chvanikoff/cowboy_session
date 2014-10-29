@@ -1,7 +1,7 @@
 # Cowboy session
 
 ## Usage:
-First you need to get dependencies (gproc and ossp_uuid) and compile the code:
+First you need to get dependencies (gproc and erlang-uuid) and compile the code:
 ```bash
 make
 ```
@@ -18,7 +18,7 @@ cowboy_session:start().
 or manually
 ```erlang
 application:start(gproc),
-application:start(ossp_uuid),
+application:start(uuid),
 application:start(cowboy_session).
 ```
 
