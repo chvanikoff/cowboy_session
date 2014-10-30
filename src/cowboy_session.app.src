@@ -6,7 +6,7 @@
 		kernel,
 		stdlib,
 		gproc,
-		ossp_uuid
+		uuid
 	]},
 	{mod, {cowboy_session, []}},
 	{env, []}

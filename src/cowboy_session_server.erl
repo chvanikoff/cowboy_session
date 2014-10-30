@@ -92,7 +92,7 @@ handle_cast(touch, #state{expire = Expire, expire_tref = Expire_TRef} = State) -
 
 handle_cast(stop, #state{expire_tref = Expire_TRef} = State) ->
 	timer:cancel(Expire_TRef),
-	{stop, stopped, State#state{expire_tref = nil}};
+	{stop, normal, State#state{expire_tref = nil}};
 
 handle_cast(_, State) -> {noreply, State}.
 
