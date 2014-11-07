@@ -62,7 +62,8 @@ touch(Req) ->
 
 start(_StartType, _StartArgs) ->
 	{ok, Sup} = supervisor:start_link({local, ?MODULE}, ?MODULE, []),
-	supervisor:start_child(Sup, ?CHILD(?CONFIG(storage), worker)),
+	{ok, Storage} = ?CONFIG(storage),
+	supervisor:start_child(Sup, ?CHILD(Storage, worker)),
 	{ok, Sup}.
 
 stop(_State) ->
@@ -85,8 +86,8 @@ init([]) ->
 %% ===================================================================
 
 get_session(Req) ->
-	Cookie_name = ?CONFIG(cookie_name),
-	{SID, Req2} = case cowboy_req:meta(Cookie_name, Req) of
+	{ok, Cookie_name} = ?CONFIG(cookie_name),
+	{SID, Req2} = case cowboy_req:meta(cookie, Req) of
 		{undefined, Req3} ->
 			cowboy_req:cookie(Cookie_name, Req3);
 		Result ->
@@ -106,30 +107,30 @@ get_session(Req) ->
 	end.
 
 clear_cookie(Req) ->
-	Cookie_name = ?CONFIG(cookie_name),
-	Cookie_options = ?CONFIG(cookie_options),
-	Req2 = cowboy_req:set_meta(Cookie_name, undefined, Req),
+	{ok, Cookie_name} = ?CONFIG(cookie_name),
+	{ok, Cookie_options} = ?CONFIG(cookie_options),
+	Req2 = cowboy_req:set_meta(cookie, undefined, Req),
 	cowboy_req:set_resp_cookie(
 		Cookie_name,
 		<<"deleted">>,
-		[{set_age, 0}, {local_time, {{1970, 1, 1}, {0, 0, 0}}} | Cookie_options],
+		[{max_age, 0} | Cookie_options],
 		Req2).
 
 create_session(Req) ->
 	%% The cookie value cannot contain any of the following characters:
 	%%   ,; \t\r\n\013\014
 	SID = list_to_binary(uuid:to_string(uuid:v4())),
-	Cookie_name = ?CONFIG(cookie_name),
-	Cookie_options = ?CONFIG(cookie_options),
-	Storage = ?CONFIG(storage),
-	Expire = ?CONFIG(expire),
+	{ok, Cookie_name} = ?CONFIG(cookie_name),
+	{ok, Cookie_options} = ?CONFIG(cookie_options),
+	{ok, Storage} = ?CONFIG(storage),
+	{ok, Expire} = ?CONFIG(expire),
 	{ok, Pid} = supervisor:start_child(cowboy_session_server_sup, [[
 		{sid, SID},
 		{storage, Storage},
 		{expire, Expire}
 	]]),
 	Req2 = cowboy_req:set_resp_cookie(Cookie_name, SID, Cookie_options, Req),
-	Req3 = cowboy_req:set_meta(Cookie_name, SID, Req2),
+	Req3 = cowboy_req:set_meta(cookie, SID, Req2),
 	{Pid, Req3}.
 
 ensure_started([]) -> ok;
