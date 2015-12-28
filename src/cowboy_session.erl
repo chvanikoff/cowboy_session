@@ -86,22 +86,24 @@ init([]) ->
 
 get_session(Req) ->
 	Cookie_name = ?CONFIG(cookie_name),
-	{SID, Req2} = case cowboy_req:meta(Cookie_name, Req) of
-		{undefined, Req3} ->
-			cowboy_req:cookie(Cookie_name, Req3);
+	CookieNameAtom = erlang:binary_to_atom(Cookie_name, unicode),
+	SID = case cowboy_req:meta(CookieNameAtom, Req) of
+		undefined ->
+			#{CookieNameAtom := SID2} = cowboy_req:match_cookies([{CookieNameAtom, [], undefined}], Req),
+			SID2;
 		Result ->
 			Result
 	end,
 	case SID of
 		undefined ->
-			create_session(Req2);
+			create_session(Req);
 		_ ->
 			case gproc:lookup_local_name({cowboy_session, SID}) of
 				undefined ->
-					create_session(Req2);
+					create_session(Req);
 				Pid ->
 					cowboy_session_server:touch(Pid),
-					{Pid, Req2}
+					{Pid, Req}
 			end
 	end.
 
