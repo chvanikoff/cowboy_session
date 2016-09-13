@@ -1,6 +1,6 @@
 {application, cowboy_session, [
 	{description, "Cowboy session management"},
-	{vsn, git},
+	{vsn, "1.0.0"},
 	{registered, []},
 	{applications, [
 		kernel,
@@ -9,5 +9,10 @@
 		uuid
 	]},
 	{mod, {cowboy_session, []}},
-	{env, []}
+	{env, []},
+
+	{maintainers, ["Roman Chvanikov", "Manuel Durán Aguete"]},
+	{licenses, ["MIT"]},
+	{links, [{"Github", "https://github.com/chvanikoff/cowboy_session.git"}]}
 ]}.
+
