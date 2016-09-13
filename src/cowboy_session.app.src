@@ -1,6 +1,6 @@
 {application, cowboy_session, [
 	{description, "Cowboy session management"},
-	{vsn, git},
+	{vsn, "1.0.0"},
 	{registered, []},
 	{applications, [
 		kernel,
