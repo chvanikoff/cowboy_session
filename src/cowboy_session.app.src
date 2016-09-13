@@ -9,5 +9,10 @@
 		uuid
 	]},
 	{mod, {cowboy_session, []}},
-	{env, []}
+	{env, []},
+
+	{maintainers, ["Roman Chvanikov"]},
+	{licenses, ["MIT"]},
+	{links, [{"Github", "https://github.com/chvanikoff/cowboy_session.git"}]}
 ]}.
+
