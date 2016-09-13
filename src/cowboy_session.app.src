@@ -11,7 +11,7 @@
 	{mod, {cowboy_session, []}},
 	{env, []},
 
-	{maintainers, ["Roman Chvanikov"]},
+	{maintainers, ["Roman Chvanikov", "Manuel Durán Aguete"]},
 	{licenses, ["MIT"]},
 	{links, [{"Github", "https://github.com/chvanikoff/cowboy_session.git"}]}
 ]}.
